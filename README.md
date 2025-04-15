@@ -68,3 +68,73 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+Dự án Simulations Room
+
+Dự án bạn đang xây dựng là một 2D Simulation Room tích hợp trực tiếp với Shopify, có khả năng: 1. Hiển thị danh sách sản phẩm từ Shopify (ảnh, giá, màu), 2. Kéo thả các sản phẩm vào một hình ảnh căn phòng, 3. Tùy chỉnh màu sản phẩm theo tùy chọn có sẵn (variant từ Shopify), 4. Cho phép thêm sản phẩm vào giỏ hàng Shopify.
+
+🧩 PHÂN TÍCH CHI TIẾT CÁC COMPONENT CẦN THIẾT
+
+1. ProductMenu
+   Chức năng:
+   • Lấy danh sách sản phẩm từ Shopify và hiển thị dưới dạng danh sách để chọn.
+   • Mỗi sản phẩm hiển thị hình ảnh, tên, giá, và các tùy chọn màu (nếu có).
+   Props/Input:
+   • Không cần props, dữ liệu lấy từ Shopify API.
+   Tương tác:
+   • Khi người dùng kéo sản phẩm từ menu, dữ liệu sẽ được đưa vào Room.
+
+2. RoomCanvas
+   Chức năng:
+   • Hiển thị ảnh nền của căn phòng.
+   • Là khu vực cho phép kéo thả sản phẩm từ ProductMenu.
+   • Mỗi sản phẩm được thêm vào là một instance với vị trí và màu riêng.
+   Props:
+   • Danh sách sản phẩm đã được thêm vào room.
+   Tính năng nâng cao:
+   • Kéo thả vị trí sản phẩm.
+   • Resize / rotate (nâng cao).
+
+3. ProductItem (trong Room)
+   Chức năng:
+   • Hiển thị sản phẩm trong Room.
+   • Cho phép chọn sản phẩm và mở ColorPicker.
+   Props:
+   • Thông tin sản phẩm (id, image, price, selectedColor, position).
+
+4. ColorPicker
+   Chức năng:
+   • Cho phép người dùng đổi màu sản phẩm dựa trên variant có trong Shopify.
+   • Sử dụng thư viện như react-colorful.
+   Props:
+   • Danh sách màu lấy từ product.variant.
+   • Callback khi màu được chọn để update sản phẩm trong Room.
+
+5. ShopifyCart
+   Chức năng:
+   • Danh sách sản phẩm đã chọn trong Room để thêm vào giỏ hàng.
+   • Gọi Shopify Storefront API để thêm vào giỏ.
+
+🔌 SERVICES - Tích hợp với Shopify
+
+👉 Shopify API cần dùng:
+• REST Admin API: để lấy thông tin sản phẩm (ảnh, variant, option).
+• Storefront API: để thêm sản phẩm vào giỏ hàng (checkout).
+
+🧱 Tổng hợp lại folder structure chi tiết
+
+src/
+├── assets/
+├── components/
+│ ├── ProductMenu/ # Hiển thị danh sách sản phẩm từ Shopify
+│ ├── RoomCanvas/ # Canvas chính render hình phòng + sản phẩm
+│ ├── ProductItem/ # Sản phẩm được render trong phòng
+│ ├── ColorPicker/ # Đổi màu theo variant
+│ └── ShopifyCart/ # Hiển thị giỏ hàng + checkout
+├── services/
+│ ├── shopifyService.js # Gọi REST Admin API
+│ └── storefrontService.js # Gọi GraphQL Storefront API
+├── store/ # State cho room, sản phẩm, cart
+├── utils/ # Hàm xử lý màu, map variant, v.v.
+├── App.js
+└── index.js
