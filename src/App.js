@@ -2,13 +2,15 @@
 import { useEffect, useState } from 'react';
 
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { getProducts } from './services/shopify';
 
 function App() {
+  // eslint-disable-next-line no-unused-vars
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getProducts().then(setProducts);
+    // getProducts().then(setProducts);
   }, []);
 
   return (
